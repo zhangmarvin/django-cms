@@ -159,9 +159,10 @@ def post_save_user_group(instance, raw, created, **kwargs):
 
 if get_cms_setting('PERMISSION'):
     # only if permissions are in use
-    from django.contrib.auth.models import User, Group
+    from django.contrib.auth import get_user_model
+    from django.contrib.auth.models import Group
     # register signals to user related models
-    signals.post_save.connect(post_save_user, User)
+    signals.post_save.connect(post_save_user, get_user_model())
     signals.post_save.connect(post_save_user_group, Group)
 
 
@@ -260,8 +261,8 @@ def pre_save_delete_page(instance, **kwargs):
 
 
 if get_cms_setting('PERMISSION'):
-    signals.pre_save.connect(pre_save_user, sender=User)
-    signals.pre_delete.connect(pre_delete_user, sender=User)
+    signals.pre_save.connect(pre_save_user, sender=get_user_model())
+    signals.pre_delete.connect(pre_delete_user, sender=get_user_model())
 
     signals.pre_save.connect(pre_save_user, sender=PageUser)
     signals.pre_delete.connect(pre_delete_user, sender=PageUser)
